@@ -20,6 +20,7 @@ import arcpy
 import sys, os, glob, time
 from GeMS_utilityFunctions import *
 from numbers import Number
+import shutil
 
 versionString = 'GeMS_TranslateToShape_Arc10.5.py, version of 10 December 2017'
 
@@ -448,7 +449,14 @@ else:
     if arcpy.Exists(newgdb):
         arcpy.Delete_management(newgdb)
     addMsgAndPrint('  Copying '+os.path.basename(gdb)+' to temporary geodatabase...')
-    arcpy.Copy_management(gdb,newgdb)
+    try:
+        arcpy.AddMessage("Using Arcpy Copy")
+        arcpy.Copy_management(gdb,newgdb)
+    except:
+        if arcpy.Exists(newgdb):
+            arcpy.Delete_management(newgdb)
+        arcpy.AddMessage("Using Shutil CopyTree")
+        shutil.copytree(gdb, newgdb) #Not elegent but got around a crashing issue
     main(newgdb,ows,gdb)
     addMsgAndPrint('\n  Deleting temporary geodatabase...')
     arcpy.env.workspace = ows

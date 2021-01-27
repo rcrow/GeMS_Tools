@@ -31,6 +31,7 @@ fds = arcpy.ListDatasets()
 #         featureClasses.append(fd+'/'+fc)
 rasters = arcpy.ListRasters()
 
+#arcpy.ImportToolbox(r"C:\ArcGIS\Desktop10.7\ArcToolbox\Toolboxes\USGS EGIS Tools.tbx")
 arcpy.ImportToolbox(egis.Toolbox, "usgs")
 
 
